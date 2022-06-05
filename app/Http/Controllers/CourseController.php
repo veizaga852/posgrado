@@ -4,9 +4,8 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\User;
-use Illuminate\Support\Facades\Hash;
-
-class UserController extends Controller
+use App\Models\Course;
+class CourseController extends Controller
 {
     public function __construct()
     {
@@ -18,11 +17,18 @@ class UserController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function index()
-    {   if(auth()->user()->type == 'administrador')
+    {
+        if(auth()->user()->type == 'administrador')
+        {   $courses = Course::OrderBy('theme')->get();
             $users = User::OrderBy('name')->get();
+        }
         else
+        {   $courses = Course::where('user_id', auth()->user()->id)->get();
             $users = User::where('name', auth()->user()->name)->get();
-        return view('users')->with('users', $users);
+        }
+        return view('courses')
+        ->with('courses', $courses)
+        ->with('users', $users);
     }
 
     /**
@@ -43,13 +49,8 @@ class UserController extends Controller
      */
     public function store(Request $request)
     {
-        $user = new User($request->all());
-        User::create([
-            'name' => $user['name'],
-            'email' => $user['email'],
-            'password' => Hash::make($user['password']),
-            'type' => $user['type'],
-        ]);
+        $course = new Course($request->all());
+        $course->save();
         return back();
     }
 
@@ -84,11 +85,11 @@ class UserController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $user = User::find($request->id);
-        $user->name = $request->name;
-        $user->email = $request->email;
-        $user->type = $request->type;
-        $user->save();
+        $course = Course::find($request->id);
+        $course->user_id = $request->user_id;
+        $course->theme = $request->theme;
+        $course->type = $request->type;
+        $course->save();
         return back();
     }
 
@@ -100,8 +101,8 @@ class UserController extends Controller
      */
     public function destroy(Request $request, $id)
     {
-        $user = User::find($request->id);
-        $user->delete();
+        $course = Course::find($request->id);
+        $course->delete();
         return back();
     }
 }

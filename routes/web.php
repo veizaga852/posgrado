@@ -3,6 +3,7 @@
 use Illuminate\Support\Facades\Route;
 
 use App\Http\Controllers\UserController;
+use App\Http\Controllers\CourseController;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -25,3 +26,7 @@ Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name
 Route::resource('users',UserController::class);
 Route::get('users/{id}/update', [UserController::class, 'update'])->name('users.update');
 Route::get('users/{id}/destroy', [UserController::class, 'destroy'])->name('users.destroy');
+
+Route::resource('courses',CourseController::class);
+Route::get('courses/{id}/update', [CourseController::class, 'update'])->name('courses.update');
+Route::get('courses/{id}/destroy', [CourseController::class, 'destroy'])->name('courses.destroy');

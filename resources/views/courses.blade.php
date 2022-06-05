@@ -5,11 +5,9 @@
     <div class="row justify-content-center">
         <div class="col-md-2">
             <p>
-            @if(auth()->user()->type == 'administrador')
-                <button type="button" class="btn btn-primary col-md-12" data-toggle="modal" data-target="#registrarUsuario">
-                    Nuevo Usuario
+                <button type="button" class="btn btn-primary col-md-12" data-toggle="modal" data-target="#registrarCurso">
+                    Nuevo Curso
                 </button>
-            @endif
             </p>    
         </div>
     </div>
@@ -17,31 +15,29 @@
     <div class="row justify-content-center">
         <div class="col-md-10">
         <div class="card">
-            <div class="card-header">Usuarios</div>
+            <div class="card-header">Cursos</div>
             <div class="card-body">
             <table class="table table-hover">
                 <thead>
                     <tr>
-                        <th>Nombre</th>
-                        <th>Correo</th>
+                        <th>Tema</th>
                         <th>Tipo</th>
                         <th>Fecha</th>
                         <th>Acciones</th>
                     </tr>
                 </thead>
                 <tbody>
-                    @foreach($users as $user)
+                    @foreach($courses as $course)
                     <tr>
-                        <td>{{ $user->name }}</td>
-                        <td>{{ $user->email }}</td>
-                        <td>{{ $user->type }}</td>
-                        <td>{{ $user->updated_at }}</td>
+                        <td>{{ $course->theme }}</td>
+                        <td>{{ $course->type }}</td>
+                        <td>{{ $course->updated_at }}</td>
                         <td>
                         
-                            <button type="button" class="btn btn-warning" data-toggle="modal" data-target="#editarUsuario" data-id="{{ $user->id }}" data-name="{{ $user->name }}" data-email="{{ $user->email }}" data-type="{{ $user->type }}">
+                            <button type="button" class="btn btn-warning" data-toggle="modal" data-target="#editarCurso" data-id="{{ $course->id }}" data-user_id="{{ $course->user_id }}" data-theme="{{ $course->theme }}" data-type="{{ $course->type }}">
                                 Editar
                             </button>
-                            <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#eliminarUsuario" data-id="{{ $user->id }}">
+                            <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#eliminarCurso" data-id="{{ $course->id }}">
                                 Eliminar
                             </button>
 
@@ -55,44 +51,40 @@
     </div>
 </div>
 
-<div class="modal fade" id="registrarUsuario" tabindex="-1" role="dialog" aria-labelledby="registrarModalLabel" aria-hidden="true">
+<div class="modal fade" id="registrarCurso" tabindex="-1" role="dialog" aria-labelledby="registrarModalLabel" aria-hidden="true">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="registrarModalLabel">Registrar Usuario</h5>
+                <h5 class="modal-title" id="registrarModalLabel">Registrar Curso</h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
             <div class="modal-body">
-                <form method="POST" action="{{ route('users.store') }}">
+                <form method="POST" action="{{ route('courses.store') }}">
                     @csrf
                     <div class="form-group row">
-                        <label for="recipient-name" class="col-md-4 col-form-label text-md-right">Nombre</label>
+                        <label for="recipient-name" class="col-md-4 col-form-label text-md-right">Docente</label>
                         <div class="col-md-6">
-                            <input type="text" class="form-control validate" id="name" name="name" required minlength="5" maxlength="255">
+                            <select class="form-control" id="user_id" name="user_id">
+                                @foreach($users as $user)
+                                    @if($user->type == 'docente')
+                                        <option value="{{ $user->id }}">{{ $user->name }}</option>
+                                    @endif
+                                @endforeach    
+                            </select>
                         </div>
                     </div>
                     <div class="form-group row">
-                        <label for="message-text" class="col-md-4 col-form-label text-md-right">Correo</label>
+                        <label for="message-text" class="col-md-4 col-form-label text-md-right">Tema</label>
                         <div class="col-md-6">
-                            <input type="email" class="form-control validate" id="email" name="email" required minlength="10" maxlength="255">
-                        </div>
-                    </div>
-                    <div class="form-group row">
-                        <label for="message-text" class="col-md-4 col-form-label text-md-right">Contraseña</label>
-                        <div class="col-md-6">
-                            <input type="password" class="form-control validate" id="password" name="password" required minlength="8" maxlength="255">
+                            <input type="text" class="form-control validate" id="theme" name="theme" required minlength="5" maxlength="255">
                         </div>
                     </div>
                     <div class="form-group row">
                         <label for="message-text" class="col-md-4 col-form-label text-md-right">Tipo</label>
                         <div class="col-md-6">
-                            <select class="form-control" id="type" name="type">
-                                <option value="administrador">administrador</option>
-                                <option value="docente">docente</option>
-                                <option value="estudiante">estudiante</option>
-                            </select>
+                            <input type="text" class="form-control validate" id="type" name="type" required minlength="5" maxlength="255">
                         </div>
                     </div>
                     <div class="modal-footer">
@@ -105,57 +97,46 @@
     </div>
 </div>
 
-<div class="modal fade" id="editarUsuario" tabindex="-1" role="dialog" aria-labelledby="editarModalLabel" aria-hidden="true">
+<div class="modal fade" id="editarCurso" tabindex="-1" role="dialog" aria-labelledby="editarModalLabel" aria-hidden="true">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="editarModalLabel">Editar usuario</h5>
+                <h5 class="modal-title" id="editarModalLabel">Editar curso</h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
             <div class="modal-body">
-                <form method="PUT" action="{{ route('users.update', $user->id) }}">
+                <form method="PUT" action="{{ route('courses.update', $user->id) }}">
                     @csrf 
                     <div hidden class="form-group">
                         <label for="recipient-name" class="col-form-label">id</label>
                         <input type="text" class="form-control" id="id" name="id">
                     </div>
                     <div class="form-group row">
-                        <label for="recipient-name" class="col-md-4 col-form-label text-md-right">Nombre</label>
+                        <label for="recipient-name" class="col-md-4 col-form-label text-md-right">Docente</label>
                         <div class="col-md-6">
-                            <input type="text" class="form-control validate" id="name" name="name" required minlength="5" maxlength="255">
-                        </div>
-                    </div>
-                    <div class="form-group row">
-                        <label for="message-text" class="col-md-4 col-form-label text-md-right">Correo</label>
-                        <div class="col-md-6">
-                            <input type="email" class="form-control validate" id="email" name="email" required minlength="10" maxlength="255">
-                        </div>
-                    </div>
-                    @if(auth()->user()->type == 'administrador')
-                    <div class="form-group row">
-                        <label for="message-text" class="col-md-4 col-form-label text-md-right">Tipo</label>
-                        <div class="col-md-6">
-                            <select class="form-control" id="type" name="type">
-                                <option value="administrador">administrador</option>
-                                <option value="docente">docente</option>
-                                <option value="estudiante">estudiante</option>
+                            <select class="form-control" id="user_id" name="user_id">
+                                @foreach($users as $user)
+                                    @if($user->type == 'docente')
+                                        <option value="{{ $user->id }}">{{ $user->name }}</option>
+                                    @endif
+                                @endforeach    
                             </select>
                         </div>
                     </div>
-                    @else
-                    <div hidden class="form-group row">
-                        <label for="message-text" class="col-md-4 col-form-label text-md-right">Tipo</label>
+                    <div class="form-group row">
+                        <label for="message-text" class="col-md-4 col-form-label text-md-right">Tema</label>
                         <div class="col-md-6">
-                            <select class="form-control" id="type" name="type">
-                                <option value="administrador">administrador</option>
-                                <option value="docente">docente</option>
-                                <option value="estudiante">estudiante</option>
-                            </select>
+                            <input type="text" class="form-control validate" id="theme" name="theme" required minlength="5" maxlength="255">
                         </div>
                     </div>
-                    @endif
+                    <div class="form-group row">
+                        <label for="message-text" class="col-md-4 col-form-label text-md-right">Tipo</label>
+                        <div class="col-md-6">
+                            <input type="text" class="form-control validate" id="type" name="type" required minlength="5" maxlength="255">
+                        </div>
+                    </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-danger" data-dismiss="modal">Cancelar</button>
                         <button type="submit" class="btn btn-primary">Guardar cambios</button>
@@ -166,7 +147,7 @@
     </div>
 </div>
 
-<div class="modal fade" id="eliminarUsuario" tabindex="-1" role="dialog" aria-labelledby="eliminarModalLabel" aria-hidden="true">
+<div class="modal fade" id="eliminarCurso" tabindex="-1" role="dialog" aria-labelledby="eliminarModalLabel" aria-hidden="true">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
@@ -176,7 +157,7 @@
                 </button>
             </div>
             <div class="modal-body">
-                <form method="DELETE" action="{{ route('users.destroy', $user->id) }}">
+                <form method="DELETE" action="{{ route('courses.destroy', $user->id) }}">
                     @csrf 
                     <div hidden class="form-group">
                         <label for="recipient-name" class="col-form-label">id</label>

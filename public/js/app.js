@@ -1210,11 +1210,13 @@ $('#editarUsuario').on('show.bs.modal', function (event) {
   var button = $(event.relatedTarget) 
   var id = button.data('id')
   var name = button.data('name')
-  var email = button.data('email') 
+  var email = button.data('email')
+  var type = button.data('type') 
   var modal = $(this)
   modal.find('.modal-body #id').val(id)
   modal.find('.modal-body #name').val(name)
   modal.find('.modal-body #email').val(email)
+  modal.find('.modal-body #type').val(type)
 });  
 
 $('#eliminarUsuario').on('show.bs.modal', function (event) {
@@ -1223,3 +1225,23 @@ var id = button.data('id')
 var modal = $(this)
 modal.find('.modal-body #id').val(id)
 }); 
+
+$('#editarCurso').on('show.bs.modal', function (event) {
+  var button = $(event.relatedTarget) 
+  var id = button.data('id')
+  var user_id = button.data('user_id')
+  var theme = button.data('theme')
+  var type = button.data('type')
+  var modal = $(this)
+  modal.find('.modal-body #id').val(id)
+  modal.find('.modal-body #user_id').val(user_id)
+  modal.find('.modal-body #theme').val(theme)
+  modal.find('.modal-body #type').val(type)
+});
+
+$('#eliminarCurso').on('show.bs.modal', function (event) {
+  var button = $(event.relatedTarget) 
+  var id = button.data('id') 
+  var modal = $(this)
+  modal.find('.modal-body #id').val(id)
+  });
