@@ -4,6 +4,8 @@ use Illuminate\Support\Facades\Route;
 
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\CourseController;
+use App\Http\Controllers\RecordController;
+use App\Http\Controllers\ActivitieController;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -30,3 +32,11 @@ Route::get('users/{id}/destroy', [UserController::class, 'destroy'])->name('user
 Route::resource('courses',CourseController::class);
 Route::get('courses/{id}/update', [CourseController::class, 'update'])->name('courses.update');
 Route::get('courses/{id}/destroy', [CourseController::class, 'destroy'])->name('courses.destroy');
+
+Route::resource('records',RecordController::class);
+Route::get('records/{id}/update', [RecordController::class, 'update'])->name('records.update');
+Route::get('records/{id}/destroy', [RecordController::class, 'destroy'])->name('records.destroy');
+
+Route::resource('activities',ActivitieController::class);
+Route::get('activities/{id}/update', [ActivitieController::class, 'update'])->name('activities.update');
+Route::get('activities/{id}/destroy', [ActivitieController::class, 'destroy'])->name('activities.destroy');

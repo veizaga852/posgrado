@@ -15,9 +15,10 @@ return new class extends Migration
     {
         Schema::create('activities', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('course_id');
-            $table->foreign('course_id')->references('id')->on('courses');
+            $table->unsignedBigInteger('record_id');
+            $table->foreign('record_id')->references('id')->on('records');
             $table->string('title');
+            $table->float('percentage');
             $table->float('score');
             $table->timestamps();
         });

@@ -1245,3 +1245,63 @@ $('#eliminarCurso').on('show.bs.modal', function (event) {
   var modal = $(this)
   modal.find('.modal-body #id').val(id)
   });
+
+$('#editarCurso').on('show.bs.modal', function (event) {
+  var button = $(event.relatedTarget) 
+  var id = button.data('id')
+  var user_id = button.data('user_id')
+  var theme = button.data('theme')
+  var type = button.data('type')
+  var modal = $(this)
+  modal.find('.modal-body #id').val(id)
+  modal.find('.modal-body #user_id').val(user_id)
+  modal.find('.modal-body #theme').val(theme)
+  modal.find('.modal-body #type').val(type)
+});
+
+$('#eliminarCurso').on('show.bs.modal', function (event) {
+  var button = $(event.relatedTarget) 
+  var id = button.data('id') 
+  var modal = $(this)
+  modal.find('.modal-body #id').val(id)
+});
+
+$('#editarRegistro').on('show.bs.modal', function (event) {
+  var button = $(event.relatedTarget) 
+  var id = button.data('id')
+  var user_id = button.data('user_id')
+  var course_id = button.data('course_id')
+  var modal = $(this)
+  modal.find('.modal-body #id').val(id)
+  modal.find('.modal-body #user_id').val(user_id)
+  modal.find('.modal-body #course_id').val(course_id)
+});
+
+$('#eliminarRegistro').on('show.bs.modal', function (event) {
+  var button = $(event.relatedTarget) 
+  var id = button.data('id') 
+  var modal = $(this)
+  modal.find('.modal-body #id').val(id)
+});
+
+$('#editarActividad').on('show.bs.modal', function (event) {
+  var button = $(event.relatedTarget) 
+  var id = button.data('id')
+  var record_id = button.data('record_id')
+  var title = button.data('title')
+  var percentage = button.data('percentage')
+  var score = button.data('score')
+  var modal = $(this)
+  modal.find('.modal-body #id').val(id)
+  modal.find('.modal-body #record_id').val(record_id)
+  modal.find('.modal-body #title').val(title)
+  modal.find('.modal-body #percentage').val(percentage)
+  modal.find('.modal-body #score').val(score)
+});
+
+$('#eliminarActividad').on('show.bs.modal', function (event) {
+  var button = $(event.relatedTarget) 
+  var id = button.data('id') 
+  var modal = $(this)
+  modal.find('.modal-body #id').val(id)
+});

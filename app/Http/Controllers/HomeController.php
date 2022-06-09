@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-
+use App\Models\User;
 class HomeController extends Controller
 {
     /**
@@ -23,6 +23,10 @@ class HomeController extends Controller
      */
     public function index()
     {
-        return view('home');
+        if(auth()->user()->type == 'administrador')
+            $users = User::OrderBy('name')->get();
+        else
+            $users = User::where('name', auth()->user()->name)->get();
+        return view('users')->with('users', $users);
     }
 }

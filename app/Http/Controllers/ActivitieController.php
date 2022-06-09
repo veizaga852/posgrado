@@ -3,10 +3,8 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Models\User;
-use App\Models\Course;
-use App\Models\Record;
-class CourseController extends Controller
+use App\Models\Activitie;
+class ActivitieController extends Controller
 {
     public function __construct()
     {
@@ -19,17 +17,7 @@ class CourseController extends Controller
      */
     public function index()
     {
-        if(auth()->user()->type == 'administrador')
-        {   $courses = Course::OrderBy('theme')->get();
-            $users = User::OrderBy('name')->get();
-        }
-        else
-        {   $courses = Course::where('user_id', auth()->user()->id)->get();
-            $users = User::where('name', auth()->user()->name)->get();
-        }
-        return view('courses')
-        ->with('courses', $courses)
-        ->with('users', $users);
+        //
     }
 
     /**
@@ -50,8 +38,8 @@ class CourseController extends Controller
      */
     public function store(Request $request)
     {
-        $course = new Course($request->all());
-        $course->save();
+        $activitie = new Activitie($request->all());
+        $activitie->save();
         return back();
     }
 
@@ -63,13 +51,7 @@ class CourseController extends Controller
      */
     public function show($id)
     {
-        $records = Record::where('course_id', $id)->get();
-        $users = User::OrderBy('name')->get();
-        $courses = Course::where('id', $id)->get();
-        return view('recordsshow')
-        ->with('users', $users)
-        ->with('courses', $courses)
-        ->with('records', $records);
+        //
     }
 
     /**
@@ -92,11 +74,12 @@ class CourseController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $course = Course::find($request->id);
-        $course->user_id = $request->user_id;
-        $course->theme = $request->theme;
-        $course->type = $request->type;
-        $course->save();
+        $activitie = Activitie::find($request->id);
+        $activitie->record_id = $request->record_id;
+        $activitie->title = $request->title;
+        $activitie->percentage = $request->percentage;
+        $activitie->score = $request->score;
+        $activitie->save();
         return back();
     }
 
@@ -108,8 +91,8 @@ class CourseController extends Controller
      */
     public function destroy(Request $request, $id)
     {
-        $course = Course::find($request->id);
-        $course->delete();
+        $activitie = Activitie::find($request->id);
+        $activitie->delete();
         return back();
     }
 }

@@ -6,7 +6,9 @@ use Illuminate\Http\Request;
 use App\Models\User;
 use App\Models\Course;
 use App\Models\Record;
-class CourseController extends Controller
+use App\Models\Activitie;
+
+class RecordController extends Controller
 {
     public function __construct()
     {
@@ -22,14 +24,17 @@ class CourseController extends Controller
         if(auth()->user()->type == 'administrador')
         {   $courses = Course::OrderBy('theme')->get();
             $users = User::OrderBy('name')->get();
+            $records = Record::OrderBy('updated_at')->get();
         }
         else
-        {   $courses = Course::where('user_id', auth()->user()->id)->get();
+        {   $courses = Course::OrderBy('theme')->get();
             $users = User::where('name', auth()->user()->name)->get();
+            $records = Record::where('user_id', auth()->user()->id)->get();
         }
-        return view('courses')
+        return view('records')
         ->with('courses', $courses)
-        ->with('users', $users);
+        ->with('users', $users)
+        ->with('records', $records);
     }
 
     /**
@@ -50,8 +55,8 @@ class CourseController extends Controller
      */
     public function store(Request $request)
     {
-        $course = new Course($request->all());
-        $course->save();
+        $record = new Record($request->all());
+        $record->save();
         return back();
     }
 
@@ -62,14 +67,13 @@ class CourseController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function show($id)
-    {
-        $records = Record::where('course_id', $id)->get();
-        $users = User::OrderBy('name')->get();
-        $courses = Course::where('id', $id)->get();
-        return view('recordsshow')
-        ->with('users', $users)
-        ->with('courses', $courses)
-        ->with('records', $records);
+    {   $record = Record::find($id);
+        $course = Course::find($record->course_id);
+        $user = User::find($course->user_id);
+        return view('coursesshow')
+        ->with('user', $user)
+        ->with('course', $course)
+        ->with('record', $record);
     }
 
     /**
@@ -80,7 +84,20 @@ class CourseController extends Controller
      */
     public function edit($id)
     {
-        //
+        $activities = Activitie::where('record_id', $id)->get();
+        $records = Record::where('id', $id)->get();
+        if(auth()->user()->type == 'administrador' || auth()->user()->type == 'docente')
+        {   
+            return view('activities')
+            ->with('activities', $activities)
+            ->with('records', $records);
+        }
+        else
+        {
+            return view('activitiesshow')
+            ->with('activities', $activities)
+            ->with('records', $records);
+        }
     }
 
     /**
@@ -92,11 +109,10 @@ class CourseController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $course = Course::find($request->id);
-        $course->user_id = $request->user_id;
-        $course->theme = $request->theme;
-        $course->type = $request->type;
-        $course->save();
+        $record = Record::find($request->id);
+        $record->user_id = $request->user_id;
+        $record->course_id = $request->course_id;
+        $record->save();
         return back();
     }
 
@@ -108,8 +124,8 @@ class CourseController extends Controller
      */
     public function destroy(Request $request, $id)
     {
-        $course = Course::find($request->id);
-        $course->delete();
+        $record = Record::find($request->id);
+        $record->delete();
         return back();
     }
 }

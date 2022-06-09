@@ -5,21 +5,24 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Course extends Model
+class Record extends Model
 {
     use HasFactory;
-    protected $table = "courses";
+    protected $table = "records";
     protected $fillable = [
         'user_id',
-        'theme',
-        'type',
+        'course_id',
     ];
     public function user()
     {
         return $this->belongsTo('App/Models/User');
     }
-    public function records()
+    public function course()
     {
-        return $this->hasMany('App/Models/Record');
+        return $this->belongsTo('App/Models/Course');
+    }
+    public function activities()
+    {
+        return $this->hasMany('App/Models/Activitie');
     }
 }
